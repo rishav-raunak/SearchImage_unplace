@@ -1,7 +1,7 @@
 import React from 'react';
 import { Check } from 'lucide-react';
 
-// --- IMAGE ITEM COMPONENT ---
+
 function ImageItem({ result, onSelect, isSelected }) {
   const { urls, alt_description } = result;
 
@@ -26,8 +26,7 @@ function ImageItem({ result, onSelect, isSelected }) {
   );
 }
 
-// --- IMAGE RESULTS COMPONENT ---
-// Yeh component search results ko display karega
+
 export default function ImageResults({ results, isLoading, error, searchStatus, selectedImages, onToggleSelection }) {
   return (
     <div className="p-4 font-sans max-w-7xl mx-auto">
