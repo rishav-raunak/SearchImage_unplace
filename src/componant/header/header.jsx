@@ -1,20 +1,20 @@
 import React from 'react';
 import { Home, Search, Loader2 } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom'; // React Router hooks
+import { Link, useNavigate } from 'react-router-dom'; 
 
-// --- HEADER COMPONENT ---
-// Ise props (user, search state) App.jsx se milenge
+//  HEADER
+
 const Header = ({ user, searchTerm, setSearchTerm, onSearchSubmit, isSearchLoading }) => {
   const navigate = useNavigate();
 
-  // Check karein ki user logged in hai
-  const isLoggedIn = user && !user.isAnonymous; // Purana logic
-  // const isLoggedIn = !!user; // Naya logic
+  
+  const isLoggedIn = user && !user.isAnonymous; 
+ 
 
   return (
     <nav className="w-full bg-gray-100 dark:bg-gray-800 p-3 shadow-md transition-colors duration-300 flex justify-between items-center gap-4">
       
-      {/* Left Side: Logo (Home link) */}
+     
       <Link to="/" className="flex items-center space-x-2 flex-shrink-0">
         <Home className="w-6 h-6 text-indigo-500" />
         <span className="text-2xl font-bold text-gray-900 dark:text-white font-serif">
@@ -22,7 +22,7 @@ const Header = ({ user, searchTerm, setSearchTerm, onSearchSubmit, isSearchLoadi
         </span>
       </Link>
 
-      {/* Center: Search Bar */}
+     
       <form
         onSubmit={onSearchSubmit}
         className="flex-grow max-w-xl mx-4"
@@ -45,23 +45,23 @@ const Header = ({ user, searchTerm, setSearchTerm, onSearchSubmit, isSearchLoadi
         </div>
       </form>
 
-      {/* Right Side: Conditional UI */}
+    
       <div className="flex items-center gap-4 flex-shrink-0">
         {isLoggedIn ? (
           <>
-            {/* User ka naam, dashboard par link karega */}
+           
             <Link
               to="/dashboard"
               className="text-md font-medium text-gray-700 dark:text-gray-200 hover:text-indigo-600"
             >
-              {/* Hum user.displayName (Google/FB) ya user.email use kar sakte hain */}
+             
               {user.displayName || (user.email ? user.email.split('@')[0] : 'Profile')}
             </Link>
           </>
         ) : (
-          /* Agar logged in nahi hai, toh Create Account button */
+      
           <button
-            onClick={() => navigate('/OAuth')} // React Router navigation
+            onClick={() => navigate('/OAuth')} 
             className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
           >
             Create Account
