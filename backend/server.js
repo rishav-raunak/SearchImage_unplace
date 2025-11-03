@@ -5,7 +5,7 @@ import cors from "cors";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-// --- OAuth aur Session ke liye Imports ---
+
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Strategy as GitHubStrategy } from "passport-github2";
@@ -18,10 +18,9 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// --- Passport Middleware Setup ---
-// (http://localhost par session ke liye 'secure: false')
+
 app.use(session({
-  secret: process.env.SESSION_SECRET, // Yeh .env file mein add karein
+  secret: process.env.SESSION_SECRET, 
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false } 
@@ -29,19 +28,19 @@ app.use(session({
 
 // Passport initialize
 app.use(passport.initialize());
-app.use(passport.session()); // Passport ko session istemaal karne dein
+app.use(passport.session()); 
 
-// --- MongoDB connect ---
+//  MongoDB connect 
 mongoose
   .connect(process.env.MONGO_URI, { dbName: "soulApp" })
-  .then(() => console.log("✅ MongoDB connected"))
-  .catch((err) => console.log("❌ MongoDB error:", err.message));
+  .then(() => console.log(" MongoDB connected"))
+  .catch((err) => console.log(" MongoDB error:", err.message));
 
-// --- Updated User Schema ---
+
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, unique: true, required: true },
-  password: { type: String }, // OAuth users ke liye optional
+  password: { type: String },
   googleId: { type: String, unique: true, sparse: true },
   githubId: { type: String, unique: true, sparse: true },
   facebookId: { type: String, unique: true, sparse: true }
@@ -49,30 +48,28 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 
-// --- Passport Strategies (Google, GitHub, Facebook) ---
 
-// Generic function OAuth profile ko handle karne ke liye
 const findOrCreateUser = async (profile, providerIdField) => {
   const userEmail = profile.emails && profile.emails[0] ? profile.emails[0].value : null;
   if (!userEmail) {
     throw new Error("Could not retrieve email from provider.");
   }
 
-  // 1. Provider ID se dhoondho
+
   let user = await User.findOne({ [providerIdField]: profile.id });
   if (user) return user;
 
-  // 2. Email se dhoondho
+  
   user = await User.findOne({ email: userEmail });
   if (user) {
-    // User hai, provider ID link kardo
+    
     user[providerIdField] = profile.id;
     user.name = user.name || profile.displayName;
     await user.save();
     return user;
   }
 
-  // 3. Naya user create karo
+ 
   const newUser = new User({
     [providerIdField]: profile.id,
     name: profile.displayName || profile.username,
@@ -82,7 +79,7 @@ const findOrCreateUser = async (profile, providerIdField) => {
   return newUser;
 };
 
-// --- Google Strategy ---
+
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -98,7 +95,7 @@ passport.use(new GoogleStrategy({
   }
 ));
 
-// --- GitHub Strategy ---
+// github
 passport.use(new GitHubStrategy({
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
@@ -115,7 +112,7 @@ passport.use(new GitHubStrategy({
   }
 ));
 
-// --- Facebook Strategy ---
+//  Facebook 
 passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_APP_SECRET,
@@ -132,7 +129,7 @@ passport.use(new FacebookStrategy({
   }
 ));
 
-// --- Passport Session Management ---
+
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
@@ -147,9 +144,6 @@ passport.deserializeUser(async (id, done) => {
 });
 
 
-// --- Local Auth Routes (Register/Login) ---
-
-// Register route
 app.post("/api/register", async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -176,7 +170,7 @@ app.post("/api/login", async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ error: "User not found" });
 
-    // Agar user ne OAuth se sign up kiya hai toh password nahi hoga
+    
     if (!user.password) {
       return res.status(400).json({ error: "Please login using the method you originally signed up with." });
     }
@@ -188,22 +182,20 @@ app.post("/api/login", async (req, res) => {
       expiresIn: "7d",
     });
 
-    // Dono (local aur OAuth) login par same user object format bhejein
+    
     res.json({ token, user: { name: user.name, email: user.email } });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// --- OAuth Routes (Google, GitHub, Facebook) ---
 
-// Generic function success response bhejme ke liye
 const sendTokenToFrontend = (req, res) => {
   const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, {
     expiresIn: "7d",
   });
 
-  // Frontend popup ko script ke through data wapas bhejo
+ 
   res.send(`
     <script>
       window.opener.postMessage({
@@ -252,14 +244,14 @@ app.get('/auth/failure', (req, res) => {
 });
 
 
-// --- Server Routes ---
 
-// Root route test
+
+
 app.get("/", (req, res) => {
-  res.send("✅ Backend Auth Server is running...");
+  res.send(" Backend Auth Server is running...");
 });
 
-// Start server
+//  server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running at http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(` Server running at http://localhost:${PORT}`));
 
