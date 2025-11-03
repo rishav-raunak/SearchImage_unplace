@@ -6,15 +6,13 @@ import {
   Facebook,
   LogIn,
   AlertCircle,
-  User // Register ke liye
+  User 
 } from "lucide-react";
 
-// Server ka base URL
+
 const API_URL = "http://localhost:5000";
 
-/**
- * Message Component (Alerts ki jagah)
- */
+
 const MessageDisplay = ({ message }) => {
   if (!message) return null;
   const isError = message.type === "error";
@@ -29,10 +27,7 @@ const MessageDisplay = ({ message }) => {
   );
 };
 
-/**
- * Login + Register Component
- * Yeh ab default export hai aur 'onLogin' prop leta hai App.jsx se
- */
+
 export default function LoginPage({ onLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -40,20 +35,19 @@ export default function LoginPage({ onLogin }) {
   const [isRegister, setIsRegister] = useState(false);
   const [message, setMessage] = useState(null); // { type: 'success'/'error', text: '...' }
 
-  // OAuth Popup Handler
+  
   useEffect(() => {
     const handleAuthMessage = (event) => {
-      // Origin check ko zaroor production mein strong banayein
-      // Local development ke liye 'http://localhost:5173' (ya aapka port) use karein
+ 
       if (event.origin !== "http://localhost:5000" && event.origin !== window.origin) {
          console.warn("Received message from unknown origin:", event.origin);
-         // return; // Production mein isko uncomment karein
+        
       }
 
       const { token, user, error } = event.data;
 
       if (token && user) {
-        onLogin(token, user); // Parent component (App.jsx) ko data bhej do
+        onLogin(token, user);
       } else if (error) {
         setMessage({ type: "error", text: error });
       }
@@ -61,13 +55,13 @@ export default function LoginPage({ onLogin }) {
 
     window.addEventListener("message", handleAuthMessage);
 
-    // Cleanup listener
+   
     return () => {
       window.removeEventListener("message", handleAuthMessage);
     };
-  }, [onLogin]); // onLogin ko dependency array mein add karein
+  }, [onLogin]); 
 
-  // Local Login
+ 
   const handleLogin = async (e) => {
     e.preventDefault();
     setMessage(null);
@@ -82,17 +76,17 @@ export default function LoginPage({ onLogin }) {
       });
       const data = await res.json();
       if (res.ok) {
-        onLogin(data.token, data.user); // App.jsx ka function call karein
+        onLogin(data.token, data.user); 
       } else {
         setMessage({ type: "error", text: data.error || "Login failed" });
       }
     } catch (err) {
-      console.error("Login Fetch Error:", err); // Asli error console mein dekhein
+      console.error("Login Fetch Error:", err); 
       setMessage({ type: "error", text: "Server error. Please try again." });
     }
   };
 
-  // Local Register
+  //  Register
   const handleRegister = async (e) => {
     e.preventDefault();
     setMessage(null);
@@ -116,12 +110,12 @@ export default function LoginPage({ onLogin }) {
         setMessage({ type: "error", text: data.error || "Registration failed" });
       }
     } catch (err) {
-      console.error("Register Fetch Error:", err); // Asli error console mein dekhein
+      console.error("Register Fetch Error:", err);
       setMessage({ type: "error", text: "Server error. Please try again." });
     }
   };
 
-  // OAuth button click hone par popup kholega
+ 
   const handleOAuth = (provider) => {
     const url = `${API_URL}/auth/${provider.toLowerCase()}`;
     // Popup window
@@ -138,10 +132,10 @@ export default function LoginPage({ onLogin }) {
           {isRegister ? "Create Account" : "Log in to Soul"}
         </h2>
 
-        {/* Message Display Area */}
+        
         <MessageDisplay message={message} />
 
-        {/* Email/Password Form */}
+       
         <form
           onSubmit={isRegister ? handleRegister : handleLogin}
           className="space-y-4"
@@ -236,7 +230,7 @@ export default function LoginPage({ onLogin }) {
           <span className="w-full h-px bg-gray-300 dark:bg-gray-600"></span>
         </div>
 
-        {/* OAuth Buttons */}
+      
         <div className="space-y-3">
           <button
             onClick={() => handleOAuth("Google")}
