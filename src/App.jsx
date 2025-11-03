@@ -6,13 +6,13 @@ Route,
 Navigate,
 } from "react-router-dom";
 
-import Header from "./componant/header/header.jsx"; // Path ko vaapas "componant" kar diya
-import LoginPage from "./Authentication/OAuth.jsx"; // Yeh path theek tha
-import Dashboard from "./componant/user-dashboard/dashboard.jsx"; // Path ko vaapas "componant" kar diya
-import ImageResults from "./componant/ImageResults/ImageResults.jsx"; // Path ko "componant" kar diya
+import Header from "./componant/header/header.jsx"; 
+import LoginPage from "./Authentication/OAuth.jsx"; 
+import Dashboard from "./componant/user-dashboard/dashboard.jsx"; 
+import ImageResults from "./componant/ImageResults/ImageResults.jsx"; 
 
 
-const UNSPLASH_ACCESS_KEY = 'REACT_APP_UNSPLASH_ACCESS_KEY'; // <-- Key yahan daalein
+const UNSPLASH_ACCESS_KEY = 'REACT_APP_UNSPLASH_ACCESS_KEY'; // <-- add unplace key
 
 const App = () => {
  
