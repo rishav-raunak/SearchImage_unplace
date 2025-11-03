@@ -1,11 +1,10 @@
 import React from 'react';
 import { User, Mail, History, Award, LogOut } from 'lucide-react';
 
-// --- MAIN DASHBOARD COMPONENT ---
-// Ise props (user, onLogout) milenge App.jsx se
+
 export default function Dashboard({ user, onLogout }) {
 
-  // --- START: Defensive Guard ---
+
   if (!user) {
     return (
       <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-4 md:p-8">
@@ -18,16 +17,16 @@ export default function Dashboard({ user, onLogout }) {
       </div>
     );
   }
-  // --- END: Defensive Guard ---
+
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-4 md:p-8">
       <div className="max-w-7xl mx-auto space-y-6">
 
-        {/* Section 1: User Info & Logout Button */}
+       
         <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow">
           <div className="flex justify-between items-start">
-            {/* User Info */}
+           
             <div>
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
                 Welcome back, {user.displayName || (user.email ? user.email.split('@')[0] : 'User')}!
@@ -44,7 +43,7 @@ export default function Dashboard({ user, onLogout }) {
               </div>
             </div>
             
-            {/* --- LOGOUT BUTTON ADDED HERE --- */}
+            // LOGOUT BUTTON 
             <button
               onClick={onLogout}
               className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition flex items-center gap-2 flex-shrink-0"
@@ -55,13 +54,13 @@ export default function Dashboard({ user, onLogout }) {
           </div>
         </div>
 
-        {/* Section 2: Placeholder for History & Leaderboard */}
+       
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
          
-          {/* Left Side: Placeholders */}
+       
           <div className="lg:col-span-1 space-y-6">
             
-            {/* History Placeholder */}
+           
             <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
                 <History className="w-5 h-5 text-indigo-500" />
@@ -72,7 +71,7 @@ export default function Dashboard({ user, onLogout }) {
               </p>
             </div>
             
-            {/* Leaderboard Placeholder */}
+           
             <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
                 <Award className="w-5 h-5 text-yellow-500" />
@@ -84,7 +83,7 @@ export default function Dashboard({ user, onLogout }) {
             </div>
           </div>
 
-          {/* Right Side: (Empty or other content) */}
+         
           <div className="lg:col-span-2 p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
                Your Dashboard
